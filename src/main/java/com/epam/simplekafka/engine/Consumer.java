@@ -13,12 +13,14 @@ import java.io.IOException;
 
 @Service
 public class Consumer {
-
     private final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
     @KafkaListener(topics = "users", groupId = "group_id")
     public void consume(@Payload User user,
                         @Headers MessageHeaders headers) throws IOException {
         logger.info("consumer got: " + user);
+        headers.keySet().forEach(key -> {
+            logger.info("{}: {}", key, headers.get(key));
+        });
     }
 }
